@@ -1,0 +1,31 @@
+# Learning Log – Session 3 – 1/27 – Setting Up GitHub/VS Code
+
+## 10 Things I Don't Understand About the HTML Output Below
+
+1. Why are there carrot signs? ">"
+2. What does h2 mean?
+3. Why do we need < section >?
+4. What is href?
+5. Why do we need target="_blank">
+6. What does README page < /a > do?
+7. Is section different than p?
+8. What does p mean?
+9. Whey for some p and sections do they have a / before them and others do not?
+10. What does <ahref= mean?
+
+What I Created:
+
+<section>
+  <h2>About Me</h2>
+  <p>
+    I'm Davina, a junior interested in Product Management and eager to understand how products work.
+    Let's collaborate!
+  </p>
+</section>
+
+<section>
+  <h2>Read Me</h2>
+  <p>
+    Check out my <a href="https://github.com/davina-li-01/davina-li-01.github.io/blob/main/README.md" target="_blank">README page</a> to learn more about my work and interests.
+  </p>
+</section>
