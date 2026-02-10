@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me</title>
+    <style>
+        nav ul { list-style: none; padding: 0; margin: 0; display: flex; gap: 1rem; }
+        nav a { text-decoration: none; color: inherit; }
+        header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        footer { margin-top: 2rem; border-top: 1px solid #ddd; padding-top: 1rem; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+    </style>
+</head>
+
+<body id="top">
+    <header>
+        <h1>Davina Li</h1>
+        <nav>
+            <ul>
+                <li><a href="#top">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#favorite">Favorite Website</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="about">
+            <h2>About Me</h2>
+                <p>I am a junior at Babson College studying <mark>Technology Entrepreneurship</mark>
+                and Data Analytics. I’m interested in building data-driven solutions
+                that make customer experiences frictionless.
+                </p>
+        </section>
+
+        <section id="favorite">
+            <h2>My Favorite Website</h2>
+            <p>Click <a href="https://www.gentlemonster.com/index.php" target="_blank">Here</a> for my favorite website which is Gentle Monster!</p>
+
+            <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/vEiNscow8mM"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+            ></iframe>
+            </div>
+            
+        </section>
+    </main>
+
+    <footer id="contact">
+        <h2>Contact</h2>
+        <p>Email: <a href="mailto:davinali723@gmail.com">davinali723@gmail.com</a></p>
+    </footer>
+
+</body>
+</html>
