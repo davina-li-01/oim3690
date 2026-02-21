@@ -5,4 +5,5 @@ This is my course repository for OIM3690.
 - Name: Davina Li
 
 ## Links
-- [My Portfolio]
+- My Portfolio: davina-li-01.github.io/
+- Mini Project 1: https://davina-li-01.github.io/deltasigmapi-gamma-upsilon-chapter/
