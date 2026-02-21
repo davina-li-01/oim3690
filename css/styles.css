@@ -8,6 +8,12 @@ h1, h2, h3, h4, h5, h6, p, body, nav, header, footer, section {
     --navy-light: #19376d;
     --navy-dark: #06162b;
 }
+* {
+    font-family: 'Times New Roman', Times, serif ;
+    font-weight: bold;
+    border: 1px solid black;
+    margin: 0;
+}
 
 body {
     background: var(--white);
@@ -87,4 +93,10 @@ footer {
     width: 560px;
     height: 315px;
     border: 0;
+}
+p.red {
+    color: red;
+}
+#second-paragraph {
+    color:orange;
 }
