@@ -1,0 +1,159 @@
+/*
+	SECTION 1: CSS VARIABLES
+	:root targets the highest-level element (html) and stores reusable values.
+*/
+:root {
+	--bg-color: #f5fbf8;
+	--card-color: #ffffff;
+	--primary-color: #006644;
+	--accent-color: coral;
+	--text-color: #1f2937;
+	--muted-color: #6b7280;
+	--spacing: 16px;
+	--radius: 12px;
+	--shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+	--transition-speed: 0.25s;
+}
+
+/*
+	SECTION 2: PAGE BASICS
+	body selector styles the whole page.
+*/
+body {
+	margin: 0;
+	padding: calc(var(--spacing) * 2);
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: var(--bg-color);
+	color: var(--text-color);
+	line-height: 1.6;
+}
+
+/* .page-header is a class selector for the top intro area. */
+.page-header {
+	max-width: 900px;
+	margin: 0 auto 24px;
+}
+
+/*
+	SECTION 3: CLASS PRACTICE
+	.section-title styles reusable title blocks (requested class).
+*/
+.section-title {
+	display: inline-block;
+	font-weight: 700;
+	font-size: 1.15rem;
+	color: var(--primary-color);
+	border-left: 5px solid var(--accent-color);
+	padding-left: 10px;
+	margin-bottom: 10px;
+}
+
+/* .highlight is an inline class used on span text (requested class). */
+.highlight {
+	background-color: color-mix(in srgb, var(--accent-color) 25%, white);
+	padding: 2px 8px;
+	border-radius: 999px;
+}
+
+/*
+	SECTION 4: LAYOUT
+	.interest-grid groups cards using a div/section wrapper.
+*/
+.interest-grid {
+	max-width: 900px;
+	margin: 0 auto;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: var(--spacing);
+}
+
+/* .interest-card styles each card section. */
+.interest-card {
+	background: var(--card-color);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	padding: var(--spacing);
+	transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+/*
+	:hover is a pseudo-class.
+	It applies when the mouse is over .interest-card.
+*/
+.interest-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 12px 24px rgba(0, 0, 0, 0.14);
+}
+
+/*
+	SECTION 5: LIST + CHILD PSEUDO-CLASSES
+	.interest-list styles list spacing.
+*/
+.interest-list {
+	padding-left: 20px;
+}
+
+/* li:first-child targets only the first list item in each list. */
+.interest-list li:first-child {
+	font-weight: 700;
+}
+
+/* li:last-child targets only the last list item in each list. */
+.interest-list li:last-child {
+	color: var(--muted-color);
+}
+
+/* li:nth-child(2) targets the second list item in each list. */
+.interest-list li:nth-child(2) {
+	color: var(--primary-color);
+}
+
+/*
+	SECTION 6: LINK INTERACTION
+	a is an element selector for links.
+*/
+a {
+	color: var(--primary-color);
+	font-weight: 600;
+	text-decoration: none;
+	transition: color var(--transition-speed) ease, text-decoration-color var(--transition-speed) ease;
+}
+
+/* a:hover applies while hovering over links. */
+a:hover {
+	color: var(--accent-color);
+	text-decoration: underline;
+}
+
+/* a:visited applies after a link has been visited. */
+a:visited {
+	color: #5a3ea6;
+}
+
+/*
+	SECTION 7: FOCUS INTERACTION
+	input:focus applies when user clicks/tabs into the input.
+*/
+input {
+	width: 100%;
+	max-width: 320px;
+	padding: 10px 12px;
+	border: 2px solid #d1d5db;
+	border-radius: 8px;
+	transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+input:focus {
+	border-color: var(--primary-color);
+	outline: none;
+	box-shadow: 0 0 0 4px rgba(0, 102, 68, 0.18);
+}
+
+/* .notes styles the final demo section. */
+.notes {
+	max-width: 900px;
+	margin: 24px auto 0;
+	background: var(--card-color);
+	border-radius: var(--radius);
+	padding: var(--spacing);
+}
