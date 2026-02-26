@@ -1,0 +1,8 @@
+.my-element {
+    background-color: aliceblue;
+    transition: background-color 0.3s ease;
+}
+.my-element:hover {
+    background-color: lightcoral;
+    color: white;
+}
