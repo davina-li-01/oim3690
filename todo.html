@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Simple Todo App</title>
+	<link rel="stylesheet" href="css/todo.css" />
+</head>
+<body>
+	<main class="app">
+		<h1>Todo App</h1>
+
+		<div class="toolbar">
+			<div class="view-switch" role="tablist" aria-label="Todo views">
+				<button type="button" class="view-btn active" data-view="daily">Daily</button>
+				<button type="button" class="view-btn" data-view="weekly">Weekly</button>
+				<button type="button" class="view-btn" data-view="monthly">Monthly</button>
+			</div>
+
+			<label class="date-picker-label" for="todo-date">Date</label>
+			<input id="todo-date" type="date" />
+		</div>
+
+		<form id="todo-form">
+			<input id="todo-input" type="text" placeholder="Add a task..." required />
+			<button type="submit">Add</button>
+		</form>
+
+		<p id="view-title" class="view-title"></p>
+		<ul id="todo-list"></ul>
+		<p id="empty-state" class="empty">No tasks in this view yet.</p>
+	</main>
+
+	<script>
+		const form = document.getElementById('todo-form');
+		const input = document.getElementById('todo-input');
+		const dateInput = document.getElementById('todo-date');
+		const list = document.getElementById('todo-list');
+		const emptyState = document.getElementById('empty-state');
+		const viewTitle = document.getElementById('view-title');
+		const viewButtons = document.querySelectorAll('.view-btn');
+
+		const STORAGE_KEY = 'simple_todos';
+		let todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+		let currentView = 'daily';
+
+		function todayISO() {
+			return new Date().toISOString().split('T')[0];
+		}
+
+		dateInput.value = todayISO();
+
+		// Migration for older saved todos without id/date
+		todos = todos.map((todo) => ({
+			id: todo.id || crypto.randomUUID(),
+			text: todo.text,
+			done: Boolean(todo.done),
+			date: todo.date || todayISO()
+		}));
+
+		function saveTodos() {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+		}
+
+		function toDate(value) {
+			const [y, m, d] = value.split('-').map(Number);
+			return new Date(y, m - 1, d);
+		}
+
+		function sameDay(a, b) {
+			return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+		}
+
+		function startOfWeek(date) {
+			const copy = new Date(date);
+			const day = copy.getDay();
+			const diff = day === 0 ? -6 : 1 - day; // Monday start
+			copy.setDate(copy.getDate() + diff);
+			copy.setHours(0, 0, 0, 0);
+			return copy;
+		}
+
+		function endOfWeek(date) {
+			const start = startOfWeek(date);
+			const end = new Date(start);
+			end.setDate(start.getDate() + 6);
+			end.setHours(23, 59, 59, 999);
+			return end;
+		}
+
+		function formatDate(value) {
+			return toDate(value).toLocaleDateString(undefined, {
+				month: 'short',
+				day: 'numeric',
+				year: 'numeric'
+			});
+		}
+
+		function getActiveDateString() {
+			if (currentView === 'daily') {
+				return dateInput.value || todayISO();
+			}
+
+			return todayISO();
+		}
+
+		function updateDatePickerState() {
+			dateInput.disabled = currentView !== 'daily';
+		}
+
+		function todoMatchesView(todoDateString, selectedDateString) {
+			const todoDate = toDate(todoDateString);
+			const selectedDate = toDate(selectedDateString);
+
+			if (currentView === 'daily') {
+				return sameDay(todoDate, selectedDate);
+			}
+
+			if (currentView === 'weekly') {
+				const weekStart = startOfWeek(selectedDate);
+				const weekEnd = endOfWeek(selectedDate);
+				return todoDate >= weekStart && todoDate <= weekEnd;
+			}
+
+			return todoDate.getFullYear() === selectedDate.getFullYear() && todoDate.getMonth() === selectedDate.getMonth();
+		}
+
+		function filteredTodos() {
+			const activeDate = getActiveDateString();
+			return todos
+				.filter((todo) => todoMatchesView(todo.date, activeDate))
+				.sort((a, b) => a.date.localeCompare(b.date));
+		}
+
+		function updateViewTitle() {
+			const activeDate = getActiveDateString();
+
+			if (currentView === 'daily') {
+				viewTitle.textContent = 'Daily view: ' + formatDate(activeDate);
+				return;
+			}
+
+			if (currentView === 'weekly') {
+				const selected = toDate(activeDate);
+				const start = startOfWeek(selected);
+				const end = endOfWeek(selected);
+				viewTitle.textContent = 'Weekly view (current): ' + start.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' - ' + end.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+				return;
+			}
+
+			const selected = toDate(activeDate);
+			viewTitle.textContent = 'Monthly view (current): ' + selected.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+		}
+
+		function render() {
+			list.innerHTML = '';
+			updateDatePickerState();
+			updateViewTitle();
+			const visibleTodos = filteredTodos();
+
+			if (visibleTodos.length === 0) {
+				emptyState.style.display = 'block';
+				return;
+			}
+
+			emptyState.style.display = 'none';
+
+			visibleTodos.forEach((todo) => {
+				const li = document.createElement('li');
+
+				const left = document.createElement('div');
+				left.className = 'row';
+
+				const checkbox = document.createElement('input');
+				checkbox.type = 'checkbox';
+				checkbox.checked = todo.done;
+				checkbox.addEventListener('change', () => {
+					const target = todos.find((item) => item.id === todo.id);
+					if (!target) return;
+					target.done = checkbox.checked;
+					saveTodos();
+					render();
+				});
+
+				const text = document.createElement('span');
+				text.className = 'todo-text' + (todo.done ? ' done' : '');
+				text.textContent = todo.text;
+
+				const taskDate = document.createElement('small');
+				taskDate.className = 'task-date';
+				taskDate.textContent = formatDate(todo.date);
+
+				left.appendChild(checkbox);
+				left.appendChild(text);
+				left.appendChild(taskDate);
+
+				const delBtn = document.createElement('button');
+				delBtn.type = 'button';
+				delBtn.className = 'delete-btn';
+				delBtn.textContent = 'Delete';
+				delBtn.addEventListener('click', () => {
+					todos = todos.filter((item) => item.id !== todo.id);
+					saveTodos();
+					render();
+				});
+
+				li.appendChild(left);
+				li.appendChild(delBtn);
+				list.appendChild(li);
+			});
+		}
+
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const text = input.value.trim();
+			if (!text) return;
+
+			todos.push({
+				id: crypto.randomUUID(),
+				text,
+				done: false,
+				date: getActiveDateString()
+			});
+			saveTodos();
+			render();
+			form.reset();
+			dateInput.value = dateInput.value || todayISO();
+			input.focus();
+		});
+
+		dateInput.addEventListener('change', render);
+
+		viewButtons.forEach((button) => {
+			button.addEventListener('click', () => {
+				currentView = button.dataset.view;
+				viewButtons.forEach((btn) => btn.classList.remove('active'));
+				button.classList.add('active');
+				render();
+			});
+		});
+
+		render();
+	</script>
+</body>
+</html>
