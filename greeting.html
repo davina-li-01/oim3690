@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Greeting Page</h1>
+    <input id ="name" type="text">
+    <button>Greet</button>
+    <p></p>
+
+    <script>
+        const button = document.querySelector('button');
+        const nameInput = document.querySelector('#name');
+        const p = document.querySelector('p');
+
+        button.addEventListener('click', () => {
+            const name = nameInput.value;
+            p.textContent = `Hello, ${name}! Welcome to JavaScript.`;
+        });
+    </script>
+</body>
+</html>

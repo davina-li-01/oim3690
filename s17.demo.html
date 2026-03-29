@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let name = 'Davina';
+        let message = `Hello, ${name}! Welcome to JavaScript.`;
+        console.log(message);
+
+        let isEmployed = true;
+        console.log(`Is ${name} employed? ${isEmployed}`);
+
+        if (isEmployed) {
+            console.log(`${name} is currently employed.`);
+        } else {
+            console.log(`${name} is currently unemployed.`);
+        }
+
+        let officeLocation;
+        console.log(`Office location: ${officeLocation}`);
+
+        let manager = null; // this variable is null
+        console.log(`Manager: ${manager}`);
+
+        // New way (template literals)
+        let msg2 = 'Hello, ${name}! Welcome to JavaScript.';
+
+        // Multi-line strings
+        let html = `
+            <div>
+                <h1>Welcome, ${name}!</h1>
+                <p>This is a multi-line string using template literals.</p>
+            </div>
+        `;
+    </script>
+</body>
+</html>
