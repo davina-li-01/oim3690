@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="number" id="x" placeholder="Enter x" />
+    <input type="number" id="y" placeholder="Enter y" />
+    <button id="Button">Add</button>
+    <p id="result"></p>
+
+    <script>
+        const x = document.getElementById ('x');
+        const y = document.getElementById('y');
+        const Button = document.getElementById('Button');
+        const result = document.getElementById('result');
+
+        // clicking button will show the sum of x and y in the result paragraph
+        function add(a,b) {
+            return a + b;
+        }
+
+        Button.addEventListener('click', function () {
+            xInput = parseFloat(x.value);
+            yInput = parseFloat(y.value);
+            const sum = add(xInput, yInput);
+            result.textContent = ` The sum is: ${sum}`;
+        });
+    </script>
+</body>
+</html>
