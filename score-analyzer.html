@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Score Analyzer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+
+    li {
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Quiz Score Analyzer</h1>
+
+  <h2>Scores + Grades</h2>
+  <ul id="scoreList"></ul>
+
+  <h2>Summary</h2>
+  <p id="total"></p>
+  <p id="average"></p>
+  <p id="highest"></p>
+  <p id="lowest"></p>
+  <p id="passing"></p>
+
+  <script>
+    const scores = [88, 72, 95, 63, 81, 56, 90];
+
+    function getGrade(score) {
+      if (score >= 90) return 'A';
+      if (score >= 60) return 'Pass';
+      return 'Fail';
+    }
+
+    let total = 0;
+    let highest = scores[0];
+    let lowest = scores[0];
+    let passingCount = 0;
+
+    const scoreList = document.getElementById('scoreList');
+
+    for (let i = 0; i < scores.length; i++) {
+      const score = scores[i];
+      total += score;
+
+      if (score > highest) highest = score;
+      if (score < lowest) lowest = score;
+      if (score >= 60) passingCount++;
+
+      const li = document.createElement('li');
+      li.textContent = `Score: ${score} (${getGrade(score)})`;
+      scoreList.appendChild(li);
+    }
+
+    const average = total / scores.length;
+
+    document.getElementById('total').textContent = `Total number of scores: ${scores.length}`;
+    document.getElementById('average').textContent = `Average score: ${average.toFixed(1)}`;
+    document.getElementById('highest').textContent = `Highest score: ${highest}`;
+    document.getElementById('lowest').textContent = `Lowest score: ${lowest}`;
+    document.getElementById('passing').textContent = `Number of passing scores (>= 60): ${passingCount}`;
+  </script>
+</body>
+</html>
