@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loop Challenges</title>
+</head>
+<body>
+    <h1>Loop Challenges</h1>
+
+    <input type="number" id="numberInput" placeholder="Enter a number" />
+    <button id="btn">Sum</button>
+    <div id="result"></div>
+
+    <h2>1) Build a list</h2>
+    <ul id="numberList"></ul>
+
+    <h2>2) Sum it up</h2>
+    <p id="sumResult"></p>
+
+    <h2>3) Find the max</h2>
+    <p id="maxResult"></p>
+
+    <h2>4) Count positives</h2>
+    <p id="positiveResult"></p>
+
+    <h2>5) Find evens</h2>
+    <p id="evenResult"></p>
+
+    <script>
+        const numbers = [4, -8, 15, -16, 23, 42, -3];
+
+        document.getElementById("btn").addEventListener("click", () => {
+            let total = 0;
+            for (const n of numbers) total += n;
+            document.getElementById("result").textContent = `Sum: ${total}`;
+        });
+
+        // 1) Build a list
+        const list = document.getElementById("numberList");
+        for (const n of numbers) {
+            const li = document.createElement("li");
+            li.textContent = n;
+            list.appendChild(li);
+        }
+
+        // 2) Sum it up
+        let sum = 0;
+        for (const n of numbers) {
+            sum += n;
+        }
+        document.getElementById("sumResult").textContent = "Total: " + sum;
+
+        // 3) Find the max (no Math.max)
+        let max = numbers[0];
+        for (const n of numbers) {
+            if (n > max) max = n;
+        }
+        document.getElementById("maxResult").textContent = "Largest number: " + max;
+
+        // 4) Count positives
+        let positiveCount = 0;
+        for (const n of numbers) {
+            if (n > 0) positiveCount++;
+        }
+        document.getElementById("positiveResult").textContent =
+            "Positive numbers: " + positiveCount;
+
+        // 5) Find evens
+        const evens = [];
+        for (const n of numbers) {
+            if (n % 2 === 0) evens.push(n);
+        }
+        document.getElementById("evenResult").textContent =
+            "Even numbers: " + evens.join(", ");
+    </script>
+</body>
+</html>

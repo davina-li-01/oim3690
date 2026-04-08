@@ -7,65 +7,143 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 600px;
+      max-width: 700px;
       margin: 40px auto;
       padding: 0 16px;
     }
 
-    li {
-      margin: 4px 0;
+    .stats p {
+      margin: 6px 0;
+    }
+
+    .bars {
+      margin-top: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .label {
+      width: 90px;
+      font-size: 14px;
+    }
+
+    .track {
+      flex: 1;
+      height: 24px;
+      border-radius: 6px;
+      background: #f1f1f1;
+      border: 1px solid #ddd;
+      overflow: hidden;
+    }
+
+    .bar {
+      height: 100%;
+      color: #fff;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+      box-sizing: border-box;
+      white-space: nowrap;
+    }
+
+    .ab {
+      background: #2e7d32;
+    }
+
+    .cd {
+      background: #ef6c00;
+    }
+
+    .f {
+      background: #c62828;
     }
   </style>
 </head>
 <body>
-  <h1>Quiz Score Analyzer</h1>
+  <h1>Score Analyzer</h1>
 
-  <h2>Scores + Grades</h2>
-  <ul id="scoreList"></ul>
+  <section class="stats">
+    <p id="count"></p>
+    <p id="average"></p>
+    <p id="highest"></p>
+    <p id="lowest"></p>
+    <p id="passing"></p>
+  </section>
 
-  <h2>Summary</h2>
-  <p id="total"></p>
-  <p id="average"></p>
-  <p id="highest"></p>
-  <p id="lowest"></p>
-  <p id="passing"></p>
+  <h2>Score Bars</h2>
+  <section id="bars" class="bars"></section>
 
   <script>
     const scores = [88, 72, 95, 63, 81, 56, 90];
 
     function getGrade(score) {
       if (score >= 90) return 'A';
-      if (score >= 60) return 'Pass';
-      return 'Fail';
+      if (score >= 80) return 'B';
+      if (score >= 70) return 'C';
+      if (score >= 60) return 'D';
+      return 'F';
+    }
+
+    function getColorClass(grade) {
+      if (grade === 'A' || grade === 'B') return 'ab';
+      if (grade === 'C' || grade === 'D') return 'cd';
+      return 'f';
     }
 
     let total = 0;
     let highest = scores[0];
     let lowest = scores[0];
-    let passingCount = 0;
+    let passing = 0;
 
-    const scoreList = document.getElementById('scoreList');
-
-    for (let i = 0; i < scores.length; i++) {
-      const score = scores[i];
+    for (const score of scores) {
       total += score;
 
       if (score > highest) highest = score;
       if (score < lowest) lowest = score;
-      if (score >= 60) passingCount++;
-
-      const li = document.createElement('li');
-      li.textContent = `Score: ${score} (${getGrade(score)})`;
-      scoreList.appendChild(li);
+      if (score >= 60) passing++;
     }
 
-    const average = total / scores.length;
+    const count = scores.length;
+    const average = (total / count).toFixed(1);
 
-    document.getElementById('total').textContent = `Total number of scores: ${scores.length}`;
-    document.getElementById('average').textContent = `Average score: ${average.toFixed(1)}`;
-    document.getElementById('highest').textContent = `Highest score: ${highest}`;
-    document.getElementById('lowest').textContent = `Lowest score: ${lowest}`;
-    document.getElementById('passing').textContent = `Number of passing scores (>= 60): ${passingCount}`;
+    document.getElementById('count').textContent = `Total number of scores: ${count}`;
+    document.getElementById('average').textContent = `Average: ${average}`;
+    document.getElementById('highest').textContent = `Highest: ${highest}`;
+    document.getElementById('lowest').textContent = `Lowest: ${lowest}`;
+    document.getElementById('passing').textContent = `Passing scores (>= 60): ${passing}`;
+
+    const bars = document.getElementById('bars');
+
+    for (const score of scores) {
+      const grade = getGrade(score);
+
+      const row = document.createElement('div');
+      row.className = 'row';
+
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = `Score ${score}`;
+
+      const track = document.createElement('div');
+      track.className = 'track';
+
+      const bar = document.createElement('div');
+      bar.className = `bar ${getColorClass(grade)}`;
+      bar.style.width = `${score}%`;
+      bar.textContent = `${score}% (${grade})`;
+
+      track.appendChild(bar);
+      row.appendChild(label);
+      row.appendChild(track);
+      bars.appendChild(row);
+    }
   </script>
 </body>
 </html>
