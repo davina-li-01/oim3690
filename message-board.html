@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Class Message Board</title>
+</head>
+<body>
+  <h1>Class Message Board</h1>
+
+  <input id="messageInput" type="text" placeholder="Type a message" />
+  <button id="postBtn">Post</button>
+
+  <p id="status"></p>
+  <ul id="messageList"></ul>
+
+  <script>
+    const API_URL = 'https://oim.108122.xyz/messages';
+    const TOKEN = 'davinadavina'; // first name x2
+
+    const input = document.getElementById('messageInput');
+    const postBtn = document.getElementById('postBtn');
+    const status = document.getElementById('status');
+    const list = document.getElementById('messageList');
+
+    async function loadMessages() {
+      status.textContent = 'loading...';
+      try {
+        const res = await fetch(API_URL, {
+          headers: { 'X-Token': TOKEN }
+        });
+        if (!res.ok) throw new Error('Failed to load messages');
+
+        const data = await res.json();
+        const messages = Array.isArray(data) ? data : data.data || [];
+
+        list.innerHTML = '';
+        messages.forEach((item) => {
+          const li = document.createElement('li');
+          li.textContent = item.message || item.text || JSON.stringify(item);
+          list.appendChild(li);
+        });
+
+        status.textContent = '';
+      } catch (error) {
+        status.textContent = 'Could not load messages.';
+      }
+    }
+
+    async function postMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      status.textContent = 'posting...';
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Token': TOKEN
+          },
+          body: JSON.stringify({ message: text })
+        });
+
+        if (!res.ok) throw new Error('Failed to post message');
+
+        input.value = '';
+        await loadMessages();
+      } catch (error) {
+        status.textContent = 'Could not post message.';
+      }
+    }
+
+    postBtn.addEventListener('click', postMessage);
+    loadMessages();
+  </script>
+</body>
+</html>

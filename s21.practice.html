@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    const nums = [10, 20, 30];f
+    for (let i = 0; i < nums.length; i++) { let sum = 0; sum += nums[i]; }
+
+    // Wrong! The sum variable is re-initialized to 0 in each iteration of the loop, so it will only hold the value of the current element in the array. To fix this, you should declare the sum variable outside of the loop:
+
+    let sum = 0; // Declare sum outside the loop
+    for (let i = 0; i < nums.length; i++) {
+        sum += nums[i]; // Now sum will accumulate the total
+    }
+    console.log(sum); // Output the total sum
+</script>
+</html>

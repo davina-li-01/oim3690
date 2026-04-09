@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MA Town Explorer</title>
+</head>
+<body>
+  <h1>MA Town Explorer</h1>
+
+  <input id="searchInput" type="text" placeholder="Search town name..." />
+  <p id="matchCount">Matched: 0</p>
+  <p id="largestTown"></p>
+
+  <ul id="townList"></ul>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const matchCount = document.getElementById('matchCount');
+    const largestTown = document.getElementById('largestTown');
+    const townList = document.getElementById('townList');
+
+    let towns = [];
+
+    function renderList(filteredTowns) {
+      townList.innerHTML = '';
+
+      const firstTen = filteredTowns.slice(0, 10);
+      firstTen.forEach((town) => {
+        const li = document.createElement('li');
+        li.textContent = `${town.name} | ${town.county} | Pop: ${town.population}`;
+        townList.appendChild(li);
+      });
+
+      matchCount.textContent = `Matched: ${filteredTowns.length}`;
+    }
+
+    function showLargestTown() {
+      if (!towns.length) return;
+
+      let biggest = towns[0];
+      for (const town of towns) {
+        if (town.population > biggest.population) {
+          biggest = town;
+        }
+      }
+
+      largestTown.textContent = `Largest town: ${biggest.name} (Pop: ${biggest.population})`;
+    }
+
+    function filterTowns() {
+      const term = searchInput.value.trim().toLowerCase();
+      const filtered = towns.filter((town) => town.name.toLowerCase().includes(term));
+      renderList(filtered);
+    }
+
+    async function loadTowns() {
+      try {
+        const res = await fetch('https://oim.108122.xyz/mass');
+        const data = await res.json();
+        towns = data.data || [];
+
+        showLargestTown();
+        renderList(towns);
+      } catch (error) {
+        matchCount.textContent = 'Could not load towns.';
+      }
+    }
+
+    searchInput.addEventListener('input', filterTowns);
+    loadTowns();
+  </script>
+</body>
+</html>

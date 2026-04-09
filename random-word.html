@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Word Generator</title>
+</head>
+<body>
+  <button id="getWordBtn">Get Random Word</button>
+  <p id="status"></p>
+  <h2 id="word"></h2>
+
+  <h3>5 words:</h3>
+  <ul id="wordList"></ul>
+
+  <script>
+    const btn = document.getElementById('getWordBtn');
+    const status = document.getElementById('status');
+    const wordEl = document.getElementById('word');
+    const wordList = document.getElementById('wordList');
+
+    async function getRandomWord() {
+      status.textContent = 'loading...';
+      wordEl.textContent = '';
+      wordList.innerHTML = '';
+
+      try {
+        const res = await fetch('https://oim.108122.xyz/words/random');
+        if (!res.ok) throw new Error('Request failed');
+        const word = await res.json();
+        wordEl.textContent = word;
+
+        for (let i = 0; i < 5; i++) {
+          const r = await fetch('https://oim.108122.xyz/words/random');
+          if (!r.ok) throw new Error('Request failed');
+          const w = await r.json();
+
+          const li = document.createElement('li');
+          li.textContent = w;
+          wordList.appendChild(li);
+        }
+
+        status.textContent = '';
+      } catch (error) {
+        status.textContent = 'Something went wrong. Please try again.';
+      }
+    }
+
+    btn.addEventListener('click', getRandomWord);
+  </script>
+</body>
+</html>
